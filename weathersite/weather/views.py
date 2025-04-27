@@ -1,4 +1,3 @@
-from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
 
@@ -6,7 +5,7 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, "weather/index.html")
-    # return HttpResponse("Hello, world. This is weathersite mainpage.")
+
 
 def search_weather(request):
     return render(request, "weather/locations.html")

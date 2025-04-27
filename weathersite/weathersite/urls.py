@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-import weather
+
+from weather.views import page_not_found
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("weather.urls")),
+    path("users/", include("users.urls", namespace="users")),
 ]
 
-handler404 = weather.views.page_not_found
+handler404 = page_not_found
