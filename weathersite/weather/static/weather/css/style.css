@@ -1,0 +1,13 @@
+.weather-navbar {
+            background-color: #e3f2fd;
+        }
+
+        .weather-gradient {
+            background: linear-gradient(135deg, white, #e3f2fd 100%);
+        }
+
+.navbar-nav .nav-link:hover {
+  transform: scale(1.08);
+  opacity: 0.9;
+}
+

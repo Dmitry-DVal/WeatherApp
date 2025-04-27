@@ -1,9 +1,16 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
+from django.shortcuts import render
+
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Hello, world. This is weathersite mainpage.")
+    return render(request, "weather/index.html")
+    # return HttpResponse("Hello, world. This is weathersite mainpage.")
 
 def search_weather(request):
-    return HttpResponse("Here you will find locations and up-to-date weather.")
+    return render(request, "weather/locations.html")
+
+
+def page_not_found(request, exception):
+    return render(request, "weather/not_found.html")
