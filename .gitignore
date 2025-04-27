@@ -1,0 +1,17 @@
+# Виртуальная среда, переменные окружения
+venvprod/
+venv/
+.env
+
+# Файлы проекта PyCharm
+.idea/
+__pycache__
+
+# Миграции Alembic
+
+
+# Прочее
+tasks.txt
+*.log
+/experiments
+
