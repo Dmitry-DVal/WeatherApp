@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
 
 {% block navbar_content %}
-  {% include 'users/includes/nav_users.html' %}
+    {% include 'users/includes/nav_users.html' %}
 {% endblock %}
 
 {% block content %}
-  <h1>Login.</h1>
+    <h1 class="mb-4 mt-4 text-center fw-light" style="color: #002855">Authorization to WeatherApp.</h1>
+    <div class="container col-md-4 col-md-offset-4">
+    <form method="post" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button class="btn btn-outline-primary col-md-4 col-md-offset-4" type="submit">Sign in</button>
+        </p>
+    </form>
+    </div>
 {% endblock %}
 
 

@@ -4,11 +4,11 @@
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
             <a class="nav-link disabled">UserName
-                <img src="{% static 'weather/images/settings.svg.svg' %}" alt="">
+                <img src="{% static 'weather/images/settings.svg' %}" alt="">
             </a>
         </li>
         <li class="nav-item me-3">
-            <a class="nav-link active" aria-current="page" href="#">Logout
+            <a class="nav-link active" aria-current="page" href="{% url 'users:login' %}">Logout
                 <img src="{% static 'weather/images/logout.svg' %}" alt="" class="ms-1">
             </a>
         </li>

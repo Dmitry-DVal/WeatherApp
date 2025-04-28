@@ -9,7 +9,11 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
+import logging.config
+import os
 from cgi import FieldStorage
+from pathlib import Path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "weather.apps.WeatherConfig",
-    "users.apps.UsersConfig"
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -103,6 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'users:login'
+
 TIME_ZONE = "UTC"
 
 USE_I18N = True
@@ -121,3 +128,77 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOG_DIR = Path(BASE_DIR).parent / "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOG_CONFIG = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "std_format": {
+            "format": "{asctime} - {levelname} - {name}  - {pathname} - {module} - {message}:{lineno}",
+            "style": "{",
+        },
+        "simple_format": {
+            "format": "{asctime} - {levelname} - {module}:{lineno} - {message}",
+            "style": "{",
+            "datefmt": "%H:%M:%S",
+        },
+        "color_format": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(log_color)s%(asctime)s - %(levelname)s - %(module)s:%(lineno)s - %(message)s",
+            "datefmt": "%H:%M:%S",
+            "log_colors": {
+                "DEBUG": "cyan",
+                "INFO": "green",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "bold_red",
+            },
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "color_format",
+        },
+        "debug_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "filename": LOG_DIR / "debug.log",
+            "formatter": "simple_format",
+            "maxBytes": 10485760,  # 10 MB
+            "backupCount": 1,
+            "encoding": "utf8",
+        },
+        "error_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "ERROR",
+            "filename": LOG_DIR / "error.log",
+            "formatter": "std_format",
+            "maxBytes": 10485760,  # 10 MB
+            "backupCount": 1,
+            "encoding": "utf8",
+        },
+    },
+    "loggers": {
+        "django": {
+            "level": "INFO",
+            "handlers": ["console"],
+        },
+        "weather": {
+            "level": "DEBUG",
+            "handlers": ["console", "error_file_handler", "debug_file_handler"],
+            "propagate": False,
+        },
+        "users": {
+            "level": "DEBUG",
+            "handlers": ["console", "error_file_handler", "debug_file_handler"],
+            "propagate": False,
+        },
+    },
+}
+
+logging.config.dictConfig(LOG_CONFIG)
