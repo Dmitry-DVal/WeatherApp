@@ -109,6 +109,7 @@ LANGUAGE_CODE = "en-us"
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'users:login'
+LOGIN_URL = '/users/login/'
 
 TIME_ZONE = "UTC"
 

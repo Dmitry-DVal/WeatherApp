@@ -10,9 +10,6 @@ class LoginUserForm(AuthenticationForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control me-2'}))
 
-    # class Meta:
-    #     model = get_user_model()
-    #     fields = ('username', 'password')
 
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(

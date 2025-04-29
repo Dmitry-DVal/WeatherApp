@@ -7,10 +7,15 @@
                 <img src="{% static 'weather/images/settings.svg' %}" alt="">
             </a>
         </li>
-        <li class="nav-item me-3">
-            <a class="nav-link active" aria-current="page" href="{% url 'users:login' %}">Logout
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"
+               onclick="document.getElementById('logout-form').submit()">
+                Logout
                 <img src="{% static 'weather/images/logout.svg' %}" alt="" class="ms-1">
             </a>
+            <form id="logout-form" method="post" action="{% url 'users:logout' %}" style="display: none;">
+                {% csrf_token %}
+            </form>
         </li>
     </ul>
     <form class="d-flex" role="search">
@@ -18,3 +23,5 @@
         <button class="btn btn-outline-primary" type="submit">Search</button>
     </form>
 </div>
+
+
