@@ -2,6 +2,7 @@
 venvprod/
 venv/
 .env
+*.env
 
 # Файлы проекта PyCharm
 .idea/
