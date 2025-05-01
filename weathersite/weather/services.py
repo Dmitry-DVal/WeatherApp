@@ -1,12 +1,13 @@
 import logging
-from django.core.cache import cache
 
 import requests
+from django.core.cache import cache
 
 from weathersite.settings import OW_API_KEY as api_key
+from .exceptions import WeatherAPITimeoutError, WeatherAPIConnectionError, \
+    WeatherAPIError, WeatherAPIInvalidRequestError, WeatherAPINoLocationsError
 
 logger = logging.getLogger("weather")
-
 
 
 class WeatherApiClient:
@@ -19,11 +20,12 @@ class WeatherApiClient:
         self.BASE_URL = 'https://api.openweathermap.org/'
         self.use_cache = use_cache
 
-    def search_locations_by_name(self, location_name: str, limit: int = 4, lang: str = 'rus') -> list[dict]:
+    def search_locations_by_name(self, location_name: str, limit: int = 6,
+                                 lang: str = 'rus') -> list[dict]:
         cache_key = f"geo_{location_name}"
-        if self.use_cache:
-            if cached := cache.get(cache_key):
-                return cached
+
+        if self.use_cache and (cached := cache.get(cache_key)):
+            return cached
 
         try:
             response = requests.get(
@@ -36,19 +38,40 @@ class WeatherApiClient:
                 },
                 timeout=5
             )
-        except Exception as e:
-            logger.error(f"Geocoding error: {e}")
-            return []
+            response.raise_for_status()
 
-        response.raise_for_status()
-        locations = response.json()
-        if self.use_cache:
-            cache.set(cache_key, locations, 60 * 60)  # Кеш на 1 час
-        logger.debug("Полученные локации %s", locations)
-        return locations
+            locations = response.json()
+            if not locations:  # API вернул пустой список
+                raise WeatherAPINoLocationsError("No locations found")
+
+            if self.use_cache:
+                cache.set(cache_key, locations, 60 * 60)
+
+            return locations
+        except WeatherAPINoLocationsError as e:
+            logger.error(e)
+            raise WeatherAPINoLocationsError("No locations found")
+        except requests.exceptions.Timeout as e:
+            logger.error(f"Timeout: {str(e)}")
+            raise WeatherAPITimeoutError("Service timeout") from e
+
+        except requests.exceptions.ConnectionError as e:
+            logger.error(f"Connection error: {str(e)}")
+            raise WeatherAPIConnectionError("Network problem") from e
+
+        except requests.exceptions.HTTPError as e:
+            logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
+            raise WeatherAPIInvalidRequestError(
+                f"API error: {e.response.status_code}") from e
+
+        except Exception as e:
+            logger.error(f"Unexpected error: {str(e)}", exc_info=True)
+
+            raise WeatherAPIError("Internal service error") from e
 
     def get_current_weather(self, lat: float, lon: float):
         cache_key = f"weather_{lat}_{lon}"
+        logger.debug("Cache key: %s", cache_key)
         if self.use_cache:
             if cached := cache.get(cache_key):
                 return cached
@@ -79,12 +102,15 @@ class WeatherApiClient:
         logger.debug("Полученные данные по коорданатам %s", data)
         return data
 
+
 def get_country_flag():
     pass
+
 
 def get_weather_icon_url(icon_code: str) -> str:
     """Генерация URL иконки погоды"""
     return f"https://openweathermap.org/img/wn/{icon_code}@2x.png"
+
 
 if __name__ == '__main__':
     lat = 55.750446
@@ -93,9 +119,6 @@ if __name__ == '__main__':
     weather_client = WeatherApiClient(api_key)
     weather_client.get_current_weather(lat, lon)
     weather_client.search_locations_by_name(q)
-
-
-
 
 # 1. Представление передает мне имя локаций, которые нужно найти.
 # 2. По имени ищем доступные локации

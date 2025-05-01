@@ -18,8 +18,8 @@
             </form>
         </li>
     </ul>
-    <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Searching" aria-label="Searching">
+    <form class="d-flex" role="search"  method="GET" action="{% url 'search' %}">
+        <input class="form-control me-2" type="search" placeholder="Searching" aria-label="Searching" name="city">
         <button class="btn btn-outline-primary" type="submit">Search</button>
     </form>
 </div>

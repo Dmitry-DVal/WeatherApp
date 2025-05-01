@@ -16,4 +16,5 @@ tasks.txt
 *.log
 /experiments
 /logs
-
+.ruff_cache
+.mypy_cache
