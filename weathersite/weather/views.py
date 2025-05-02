@@ -4,10 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from weather.services import WeatherApiClient
-from weathersite.settings import OW_API_KEY
-from .exceptions import WeatherAPITimeoutError, WeatherAPIConnectionError, \
-    WeatherAPIError, WeatherAPIInvalidRequestError, WeatherAPINoLocationsError
+from .utils import WeatherSearchMixin
 
 # Create your views here.
 
@@ -18,33 +15,27 @@ class WeatherHomeView(LoginRequiredMixin, TemplateView):
     template_name = 'weather/index.html'
 
 
-class ShowLocationView(LoginRequiredMixin, TemplateView):
+class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
     template_name = "weather/locations.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('city', '').strip()
+        logger.debug("Query: %s", query)
 
         if not query:
+            logger.warning("No city specified")
             context['info'] = "Please enter a city name"
             return context
 
-        try:
-            client = WeatherApiClient(api_key=OW_API_KEY, use_cache=True)
-            context['locations'] = client.search_locations_by_name(query)
-            context['query'] = query
-
-        except WeatherAPINoLocationsError as e:
-            context['info'] = "No locations found"
-            context['query'] = query
-        except WeatherAPIInvalidRequestError as e:
-            context['error'] = str(e)
-        except (WeatherAPITimeoutError, WeatherAPIConnectionError) as e:
-            context['error'] = str(e)
-        except WeatherAPIError as e:
-            context['error'] = "Service temporary unavailable"
-            logger.error(f"Weather API failure: {str(e)}")
-
+        locations, error = self.handle_search(query)
+        if error:
+            context['error'] = error
+        else:
+            context.update({
+                'locations': locations,
+                'query': query
+            })
         return context
 
 

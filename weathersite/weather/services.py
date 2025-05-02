@@ -14,10 +14,11 @@ class WeatherApiClient:
     """
     Клиент для работы с API погоды.
     """
+    BASE_URL = 'https://api.openweathermap.org/'
+    TIMEOUT = 5
 
     def __init__(self, api_key: str, use_cache=False):
         self.api_key = api_key
-        self.BASE_URL = 'https://api.openweathermap.org/'
         self.use_cache = use_cache
 
     def search_locations_by_name(self, location_name: str, limit: int = 6,
@@ -25,6 +26,7 @@ class WeatherApiClient:
         cache_key = f"geo_{location_name}"
 
         if self.use_cache and (cached := cache.get(cache_key)):
+            logger.debug("Запрос был в кеше, повторный не требуется %s", cached)
             return cached
 
         try:
@@ -36,7 +38,7 @@ class WeatherApiClient:
                     'appid': self.api_key,
                     'lang': lang
                 },
-                timeout=5
+                timeout=self.TIMEOUT
             )
             response.raise_for_status()
 
@@ -53,16 +55,14 @@ class WeatherApiClient:
             raise WeatherAPINoLocationsError("No locations found")
         except requests.exceptions.Timeout as e:
             logger.error(f"Timeout: {str(e)}")
-            raise WeatherAPITimeoutError("Service timeout") from e
-
+            raise WeatherAPITimeoutError("Service timeout")
         except requests.exceptions.ConnectionError as e:
             logger.error(f"Connection error: {str(e)}")
-            raise WeatherAPIConnectionError("Network problem") from e
-
+            raise WeatherAPIConnectionError("Network problem")
         except requests.exceptions.HTTPError as e:
             logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
             raise WeatherAPIInvalidRequestError(
-                f"API error: {e.response.status_code}") from e
+                f"API error: {e.response.status_code}")
 
         except Exception as e:
             logger.error(f"Unexpected error: {str(e)}", exc_info=True)
@@ -85,7 +85,7 @@ class WeatherApiClient:
                     'units': 'metric',
                     'lang': 'ru'
                 },
-                timeout=5
+                timeout=self.TIMEOUT
             )
         except Exception as e:
             logger.error(f"Weather API error: {e}")
