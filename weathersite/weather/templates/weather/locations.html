@@ -48,9 +48,15 @@
                                 </div>
                                 <div class="mt-auto">
                                     <div class="px-3">
-                                        <button class="btn btn-outline-primary w-100 mt-3">
-                                            Add
-                                        </button>
+                                        <form action="{% url 'add_location' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="location_name" value="{{ location.name }}"></input>
+                                            <input type="hidden" name="location_lat" value="{{ location.lat }}"></input>
+                                            <input type="hidden" name="location_lon" value="{{ location.lon }}"></input>                                            
+                                            <button class="btn btn-outline-primary w-100 mt-3">
+                                                Add
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

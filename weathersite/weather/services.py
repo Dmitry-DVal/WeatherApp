@@ -28,6 +28,7 @@ class WeatherApiClient:
         if self.use_cache and (cached := cache.get(cache_key)):
             logger.debug("Запрос был в кеше, повторный не требуется %s", cached)
             return cached
+        logger.debug("Запроса нет в Кеше, обращемся к API")
 
         try:
             response = requests.get(

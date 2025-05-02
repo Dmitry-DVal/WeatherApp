@@ -5,6 +5,6 @@ from django.db import models
 
 class Location(models.Model):
     name = models.CharField(max_length=100)
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
-    Latitude = models.DecimalField(max_digits=10, decimal_places=7)
-    Longitude = models.DecimalField(max_digits=10, decimal_places=7)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    latitude = models.DecimalField(max_digits=10, decimal_places=7)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7)
