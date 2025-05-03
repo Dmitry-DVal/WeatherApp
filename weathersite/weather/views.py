@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 
 from .models import Location
 from .utils import WeatherSearchMixin
@@ -40,17 +40,29 @@ class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
             })
         return context
 
+
 @login_required
 def add_location(request):
     logger.debug("Adding location")
-    if request.method == "POST":
-        Location.objects.create(
-            user_id=request.user,
+    if request.method == "POST":  # get_or_create()
+        Location.objects.get_or_create(
+            user=request.user,
             name=request.POST.get('location_name'),
             latitude=request.POST.get('location_lat'),
             longitude=request.POST.get('location_lon'),
         )
     return redirect("index")
+
+
+class AddLocationView(LoginRequiredMixin, View):
+    def post(self, request):
+        Location.objects.get_or_create(
+            user=request.user,
+            name=request.POST.get('name'),
+            latitude=request.POST.get('latitude'),
+            longitude=request.POST.get('longitude'),
+        )
+        return redirect("index")
 
 
 def page_not_found(request, exception):
