@@ -24,3 +24,9 @@
     transform: scale(1.2);
     transition: all 0.2s ease;
 }
+
+.flag {
+    outline-style:solid ;
+    outline-color: #e3f2fd;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}

@@ -32,6 +32,7 @@
 
             <h3 class="mt-2 mb-3" style="color: #002855; font-size: 1.5rem;">
                 {{ location.name }}, {{ location.sys.country }}
+                <img src="{% static 'weather/images/flags/' %}{{ location.sys.country|lower }}.svg" alt="flag" width="50"  class="flag">
             </h3>
 
             <div class="mb-3 text-capitalize">

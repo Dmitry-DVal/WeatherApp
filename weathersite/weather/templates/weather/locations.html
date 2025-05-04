@@ -9,31 +9,24 @@
     <h1 class="mb-4 mt-4 text-center fw-light" style="color: #002855">Found locations on
         request: {{ query|lower|capfirst }}</h1>
 
+    {% include 'weather/includes/warning_error.html' %}
 
     <div class="container">
         <div class="row g-5">
-            {% if info %}
-                <div class="alert alert-primary">
-                    <img src="{% static 'weather/images/attention.svg' %}" alt="attention">
-                    {{ info }}
-                </div>
-            {% endif %}
-
-            {% if error %}
-                <div class="alert alert-danger">
-                    <img src="{% static 'weather/images/attention.svg' %}" alt="attention">
-                    {{ error }}
-                </div>
-            {% endif %}
-
             {% if locations %}
                 {% for location in locations %}
 
                     <div class="col-sm-6 col-md-4 col-lg-3">
                         <div class="card h-100 p-3 shadow-sm">
                             <div class="card-body d-flex flex-column">
+                                <div>
+                                    <img class="flag m-3 mt-0"
+                                         src="{% static 'weather/images/flags/' %}{{ location.country|lower }}.svg"
+                                         alt="flag" width="75">
+                                </div>
                                 <h4 class="card-title mb-3 px-3" style="color: #002855">
                                     {{ location.name }}, {{ location.country }}
+
                                 </h4>
                                 <div class="my-2 px-3">
                                     <div>Lat: {{ location.lat|floatformat:6 }}</div>
@@ -57,11 +50,8 @@
                     </div>
                 {% endfor %}
             {% endif %}
-
-
         </div>
     </div>
-
 
 {% endblock %}
 

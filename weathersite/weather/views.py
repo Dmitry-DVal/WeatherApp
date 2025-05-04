@@ -1,24 +1,22 @@
 import logging
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView
 
-from weathersite.settings import OW_API_KEY
 from .models import Location
-from .services import WeatherApiClient
-from .utils import WeatherSearchMixin
+from .utils import WeatherSearchMixin, WeatherDataMixin
 
 # Create your views here.
 
 logger = logging.getLogger("weather")
 
 
-class WeatherHomeView(LoginRequiredMixin, ListView):
+class WeatherHomeView(LoginRequiredMixin, WeatherDataMixin, ListView):
     model = Location
     template_name = 'weather/index.html'
     context_object_name = 'locations_with_weather'
+
     # paginate_by = 4
 
     def get_queryset(self):
@@ -26,17 +24,22 @@ class WeatherHomeView(LoginRequiredMixin, ListView):
         return self._add_weather_data(locations)
 
     def _add_weather_data(self, locations):
-        client = WeatherApiClient(api_key=OW_API_KEY, use_cache=True)
-        return [
-            client.get_current_weather(lat=loc.latitude, lon=loc.longitude)
-            for loc in locations
-        ]
+        weather_data, error = self.handle_weather_request(locations)
+        if error:
+            self.error = error
+        return weather_data
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if hasattr(self, 'error'):
+            context['error'] = self.error
+        elif not context['locations_with_weather']:
+            context['info'] = "You don't have any saved locations yet."
+        return context
 
 
 class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
     template_name = "weather/locations.html"
-
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

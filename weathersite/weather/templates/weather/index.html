@@ -8,6 +8,9 @@
 {% block content %}
     <h1 class="mb-4 mt-4 text-center fw-light" style="color: #002855">Weather Dashboard</h1>
 
+    {% include 'weather/includes/warning_error.html' %}
+    
+
     {% if locations_with_weather %}
         <div class="container">
             <div class="row g-4">
@@ -16,11 +19,6 @@
 
                 {% endfor %}
             </div>
-        </div>
-    {% else %}
-        <div class="container alert alert-primary">
-            <img src="{% static 'weather/images/attention.svg' %}" alt="attention">
-            You don't have any saved locations yet.
         </div>
     {% endif %}
 

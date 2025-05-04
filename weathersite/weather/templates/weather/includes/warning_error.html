@@ -1,0 +1,15 @@
+{% load static %}
+
+{% if info %}
+    <div class="container alert alert-primary">
+        <img src="{% static 'weather/images/attention.svg' %}" alt="attention">
+        {{ info }}
+    </div>
+{% endif %}
+
+{% if error %}
+    <div class="container alert alert-danger">
+        <img src="{% static 'weather/images/attention.svg' %}" alt="attention">
+        {{ error }}
+    </div>
+{% endif %}
