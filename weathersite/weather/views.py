@@ -3,9 +3,11 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, ListView
 
+from weathersite.settings import OW_API_KEY
 from .models import Location
+from .services import WeatherApiClient
 from .utils import WeatherSearchMixin
 
 # Create your views here.
@@ -13,8 +15,26 @@ from .utils import WeatherSearchMixin
 logger = logging.getLogger("weather")
 
 
-class WeatherHomeView(LoginRequiredMixin, TemplateView):
+class WeatherHomeView(LoginRequiredMixin, ListView):
+    model = Location
     template_name = 'weather/index.html'
+    context_object_name = 'locations_with_weather'
+
+    def get_queryset(self):
+        user_locations = Location.objects.filter(user=self.request.user)
+        logger.debug("Получен список локаций пользователя: %s", user_locations)
+
+        # Отправляем весь список нашему
+        locations_with_weather = []
+        for location in user_locations:
+            weather_data = WeatherApiClient(api_key=OW_API_KEY, use_cache=True).get_current_weather(lat=location.latitude, lon=location.longitude)
+            logger.debug(weather_data)
+            locations_with_weather.append(weather_data)
+
+        print(locations_with_weather)
+        logger.debug(locations_with_weather)
+        return locations_with_weather
+
 
 
 class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):

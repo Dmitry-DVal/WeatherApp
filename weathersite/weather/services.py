@@ -75,6 +75,7 @@ class WeatherApiClient:
         logger.debug("Cache key: %s", cache_key)
         if self.use_cache:
             if cached := cache.get(cache_key):
+                logger.debug("Запрос был в кеше, повторный не требуется %s", cached)
                 return cached
         try:
             response = requests.get(
@@ -97,6 +98,9 @@ class WeatherApiClient:
 
         # data['flag_url'] = self.get_country_flag(data['sys']['country'])
         data['icon_url'] = get_weather_icon_url(data['weather'][0]['icon'])
+        data['timezone'] = format_timezone(data['timezone'])
+
+        logger.error('Времся %s', data['timezone'])
 
         if self.use_cache:
             cache.set(cache_key, data, 15 * 60)  # Кеш на 15 минут
@@ -111,6 +115,10 @@ def get_country_flag():
 def get_weather_icon_url(icon_code: str) -> str:
     """Генерация URL иконки погоды"""
     return f"https://openweathermap.org/img/wn/{icon_code}@2x.png"
+
+def format_timezone(seconds):
+    hours = seconds // 3600
+    return f"UTC+{hours}" if hours >= 0 else f"UTC{hours}"
 
 
 if __name__ == '__main__':

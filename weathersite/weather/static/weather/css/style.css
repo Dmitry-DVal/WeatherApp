@@ -11,3 +11,16 @@
   opacity: 0.9;
 }
 
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.remove-btn:hover img {
+    filter: brightness(0) saturate(100%) invert(34%) sepia(99%) saturate(582%) hue-rotate(175deg) brightness(94%) contrast(86%);
+    transform: scale(1.2);
+    transition: all 0.2s ease;
+}
