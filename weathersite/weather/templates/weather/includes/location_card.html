@@ -1,0 +1,53 @@
+{% load static %}
+
+<div class="col-sm-6 col-md-4 col-lg-3">
+    <div class="card h-100 p-3 shadow">
+        <div class="card-body d-flex flex-column">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="flex-shrink-0 me-0 ml-0 pl-0">
+                    <img src="{{ location.icon_url }}" alt="Weather icon" width="96" height="96">
+                </div>
+
+                <div class="w-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h2 class="mb-0" style="color: #002855; font-size: 2rem;">
+                            {{ location.main.temp|floatformat:0 }}℃
+                        </h2>
+                        <a href="#" class="text-decoration-none remove-btn">
+                            <img src="{% static 'weather/images/x-lg.svg' %}" alt="Remove" width="20">
+                        </a>
+                    </div>
+
+                    <div class="mt-1">
+                        <small class="text-muted">
+                            Ощущается как {{ location.main.feels_like|floatformat:0 }}℃
+                        </small>
+                    </div>
+                    <div class="mt-1" style="font-size: 1.1rem;">
+                        {{ location.timezone }}
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mt-2 mb-3" style="color: #002855; font-size: 1.5rem;">
+                {{ location.name }}, {{ location.sys.country }}
+            </h3>
+
+            <div class="mb-3 text-capitalize">
+                {{ location.weather.0.description }}
+            </div>
+            <div class="d-flex align-items-center mt-0">
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'weather/images/wind.svg' %}" alt="Wind" width="20" class="me-2">
+                    {{ location.wind.speed }} m/s
+                </div>
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'weather/images/droplet.svg' %}" alt="Humidity" width="20" class="me-2">
+                    {{ location.main.humidity }}%
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

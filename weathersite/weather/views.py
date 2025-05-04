@@ -19,26 +19,24 @@ class WeatherHomeView(LoginRequiredMixin, ListView):
     model = Location
     template_name = 'weather/index.html'
     context_object_name = 'locations_with_weather'
+    # paginate_by = 4
 
     def get_queryset(self):
-        user_locations = Location.objects.filter(user=self.request.user)
-        logger.debug("Получен список локаций пользователя: %s", user_locations)
+        locations = Location.objects.filter(user=self.request.user)
+        return self._add_weather_data(locations)
 
-        # Отправляем весь список нашему
-        locations_with_weather = []
-        for location in user_locations:
-            weather_data = WeatherApiClient(api_key=OW_API_KEY, use_cache=True).get_current_weather(lat=location.latitude, lon=location.longitude)
-            logger.debug(weather_data)
-            locations_with_weather.append(weather_data)
-
-        print(locations_with_weather)
-        logger.debug(locations_with_weather)
-        return locations_with_weather
-
+    def _add_weather_data(self, locations):
+        client = WeatherApiClient(api_key=OW_API_KEY, use_cache=True)
+        return [
+            client.get_current_weather(lat=loc.latitude, lon=loc.longitude)
+            for loc in locations
+        ]
 
 
 class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
     template_name = "weather/locations.html"
+
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,19 +57,6 @@ class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
                 'query': query
             })
         return context
-
-
-@login_required
-def add_location(request):
-    logger.debug("Adding location")
-    if request.method == "POST":  # get_or_create()
-        Location.objects.get_or_create(
-            user=request.user,
-            name=request.POST.get('location_name'),
-            latitude=request.POST.get('location_lat'),
-            longitude=request.POST.get('location_lon'),
-        )
-    return redirect("index")
 
 
 class AddLocationView(LoginRequiredMixin, View):

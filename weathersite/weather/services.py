@@ -100,7 +100,7 @@ class WeatherApiClient:
         data['icon_url'] = get_weather_icon_url(data['weather'][0]['icon'])
         data['timezone'] = format_timezone(data['timezone'])
 
-        logger.error('Времся %s', data['timezone'])
+        logger.debug('Новый формат времени %s', data['timezone'])
 
         if self.use_cache:
             cache.set(cache_key, data, 15 * 60)  # Кеш на 15 минут
@@ -128,10 +128,3 @@ if __name__ == '__main__':
     weather_client = WeatherApiClient(api_key)
     weather_client.get_current_weather(lat, lon)
     weather_client.search_locations_by_name(q)
-
-# 1. Представление передает мне имя локаций, которые нужно найти.
-# 2. По имени ищем доступные локации
-# 3. Найденные локации выводятся на страницу
-# 4. При добавлении к себе, сохранаяем координаты локаций, имя локации(Возможно в имени нет смысла).
-# 5. На главном экране мы выводим все локации пользователя. (Эти локации должны быть с обновленной погодой)
-# Картинка https://openweathermap.org/img/wn/04d@2x.png  # 04d == weather["icon"]
