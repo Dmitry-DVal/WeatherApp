@@ -16,8 +16,7 @@ class WeatherHomeView(LoginRequiredMixin, WeatherDataMixin, ListView):
     model = Location
     template_name = 'weather/index.html'
     context_object_name = 'locations_with_weather'
-
-    # paginate_by = 4
+    paginate_by = 8
 
     def get_queryset(self):
         locations = Location.objects.filter(user=self.request.user)

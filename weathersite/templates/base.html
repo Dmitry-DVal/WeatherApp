@@ -8,14 +8,13 @@
     <link rel="icon" href="{% static 'weather/images/favicon.svg' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <link type="text/css" href="{% static 'weather/css/style.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{% static 'weather/css/style.css' %}" rel="stylesheet"/>
     <title>WeatherApp</title>
 </head>
 <body>
 
-
 <nav class="navbar navbar-expand-lg weather-gradient sticky-top shadow-sm">
-    <div class="container" >
+    <div class="container">
         <a class="navbar-brand" href="{% url 'index' %}">
             <img src="{% static 'weather/images/sun.svg' %}" alt="AppLogo">
             WeatherApp
@@ -24,15 +23,17 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
             <span class="navbar-toggler-icon"></span>
         </button>
-    {% block navbar_content %}
-    {% endblock %}    
-        
+        {% block navbar_content %}
+        {% endblock %}
+
     </div>
 </nav>
 
 <!-- Core part -->
-{% block content %}
-{% endblock %}
+<div class="main-content" style="min-height: calc(100vh - 120px); padding-bottom: 40px;">
+    {% block content %}
+    {% endblock %}
+</div>
 
 
 <!-- Footer -->

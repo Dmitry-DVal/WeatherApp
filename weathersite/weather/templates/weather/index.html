@@ -6,10 +6,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mb-4 mt-4 text-center fw-light" style="color: #002855">Weather Dashboard</h1>
+    <h1 class="mb-2 mt-2 text-center fw-light" style="color: #002855">Weather Dashboard</h1>
 
     {% include 'weather/includes/warning_error.html' %}
-    
+
+
 
     {% if locations_with_weather %}
         <div class="container">
@@ -21,5 +22,40 @@
             </div>
         </div>
     {% endif %}
+
+
+
+    {% block navigation %}
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="Пример навигации по страницам">
+
+                <ul class="pagination d-flex justify-content-center mt-4">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ p }}" aria-label="Предыдущая">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for p in paginator.page_range %}
+
+                        {% if p == page_obj.number %}
+                            <li class="page-item page-link weather-navbar">{{ p }}</li>
+                        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:+2 %}
+
+                            <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ p }}" aria-label="Следующая">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% endblock %}
 
 {% endblock %}
