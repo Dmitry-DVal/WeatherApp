@@ -73,12 +73,12 @@ class WeatherApiClient:
         }
 
         data = self._make_request('geo/1.0/direct', params)
-        # logger.error(data)
         logger.debug(data)
-        # name = data[0]['local_names']['ru']
-        # logger.error("Локальное имя %s",name)
+
         if not data:
             raise WeatherAPINoLocationsError("No locations found")
+
+        data = self._deduplicate_locations(data)
 
         data = self._check_local_name(data)
 
@@ -124,6 +124,22 @@ class WeatherApiClient:
                 if location['local_names'][lang] != location['name']:
                     location['name'] = location['local_names'][lang]
         return data
+
+
+    def _deduplicate_locations(self, data):
+        """Удаляем дубликаты (город+страна) сохраняя первое вхождение"""
+        seen = set()
+        unique_locations = []
+
+        for loc in data:
+            # Ключ для проверки дублей: название + код страны
+            key = (loc['name'].lower(), loc['country'])
+
+            if key not in seen:
+                seen.add(key)
+                unique_locations.append(loc)
+
+        return unique_locations
 
 def get_weather_icon_url(icon_code: str) -> str:
     """Генерация URL иконки погоды"""

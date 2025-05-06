@@ -37,7 +37,6 @@ class WeatherDataMixin:
 
         try:
             for loc in locations:
-                logger.warning(loc.pk)
                 weather_data = client.get_current_weather(
                     lat=loc.latitude,
                     lon=loc.longitude
@@ -48,7 +47,7 @@ class WeatherDataMixin:
                     'name': loc.name,
                     'db_id': loc.id
                 })
-                logger.error(results)
+                logger.debug(results)
         except WeatherAPITimeoutError:
             error = "Service timeout. Please try again later."
         except WeatherAPIConnectionError:

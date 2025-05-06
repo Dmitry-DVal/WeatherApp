@@ -8,4 +8,5 @@ urlpatterns = [
     path("weather/", views.ShowLocationView.as_view(), name="search"),
     # path("location/add/", views.add_location, name="add_location"),
     path("location/add/", views.AddLocationView.as_view(), name="add_location"),
+    path("", views.DeleteWeatherCardView.as_view(), name="delete_location"),
 ]

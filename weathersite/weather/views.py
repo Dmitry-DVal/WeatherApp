@@ -61,9 +61,10 @@ class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
             })
         return context
 
-# class DeleteWeatherCardView(DeleteView):
-#     model = Location
-#     success_url = reverse_lazy('index')
+class DeleteWeatherCardView(DeleteView):
+    model = Location
+    success_url = reverse_lazy('index')
+    # context_object_name =
 
 class AddLocationView(LoginRequiredMixin, View):
     def post(self, request):

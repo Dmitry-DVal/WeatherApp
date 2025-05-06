@@ -15,7 +15,7 @@
                             {{ location.main.temp|floatformat:0 }}℃
                         </h2>
 
-                        <form action="" method="POST" >
+                        <form action="{% url 'delete_location' %}" method="POST" >
                             {% csrf_token %}
                             <input type="hidden" name="db_id" value="{{ location.db_id }}"></input>
                         <a href="#" class="text-decoration-none remove-btn">
