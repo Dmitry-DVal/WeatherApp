@@ -132,7 +132,6 @@ class WeatherApiClient:
         unique_locations = []
 
         for loc in data:
-            # Ключ для проверки дублей: название + код страны
             key = (loc['name'].lower(), loc['country'])
 
             if key not in seen:
