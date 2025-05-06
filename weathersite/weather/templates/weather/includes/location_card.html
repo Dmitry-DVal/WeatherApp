@@ -14,9 +14,15 @@
                         <h2 class="mb-0" style="color: #002855; font-size: 2rem;">
                             {{ location.main.temp|floatformat:0 }}℃
                         </h2>
+
+                        <form action="" method="POST" >
+                            {% csrf_token %}
+                            <input type="hidden" name="db_id" value="{{ location.db_id }}"></input>
                         <a href="#" class="text-decoration-none remove-btn">
                             <img src="{% static 'weather/images/x-lg.svg' %}" alt="Remove" width="20">
                         </a>
+                        </form>
+
                     </div>
 
                     <div class="mt-1">

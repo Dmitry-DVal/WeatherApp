@@ -11,6 +11,7 @@ class WeatherAPIConnectionError(WeatherAPIError):
 class WeatherAPIInvalidRequestError(WeatherAPIError):
     pass
 
+
 class WeatherAPINoLocationsError(WeatherAPIError):
     """Базовое исключение для ошибок API"""
     pass

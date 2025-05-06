@@ -3,7 +3,6 @@ import logging
 import requests
 from django.core.cache import cache
 
-from weathersite.settings import OW_API_KEY as api_key
 from .exceptions import WeatherAPITimeoutError, WeatherAPIConnectionError, \
     WeatherAPIError, WeatherAPIInvalidRequestError, WeatherAPINoLocationsError
 
@@ -74,8 +73,15 @@ class WeatherApiClient:
         }
 
         data = self._make_request('geo/1.0/direct', params)
+        # logger.error(data)
+        logger.debug(data)
+        # name = data[0]['local_names']['ru']
+        # logger.error("Локальное имя %s",name)
         if not data:
             raise WeatherAPINoLocationsError("No locations found")
+
+        data = self._check_local_name(data)
+
 
         self._set_cached_data(cache_key, data)
         return data
@@ -112,6 +118,12 @@ class WeatherApiClient:
             'timezone': format_timezone(data['timezone']),
         }
 
+    def _check_local_name(self, data, lang='ru'):
+        for location in data:
+            if 'local_names' in location and lang in location['local_names']:
+                if location['local_names'][lang] != location['name']:
+                    location['name'] = location['local_names'][lang]
+        return data
 
 def get_weather_icon_url(icon_code: str) -> str:
     """Генерация URL иконки погоды"""
@@ -121,12 +133,3 @@ def get_weather_icon_url(icon_code: str) -> str:
 def format_timezone(seconds):
     hours = seconds // 3600
     return f"UTC+{hours}" if hours >= 0 else f"UTC{hours}"
-
-
-if __name__ == '__main__':
-    lat = 55.750446
-    lon = 37.617494
-    q = 'Омск'
-    weather_client = WeatherApiClient(api_key)
-    weather_client.get_current_weather(lat, lon)
-    weather_client.search_locations_by_name(q)

@@ -2,7 +2,8 @@ import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View, ListView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, View, ListView, DeleteView
 
 from .models import Location
 from .utils import WeatherSearchMixin, WeatherDataMixin
@@ -60,6 +61,9 @@ class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
             })
         return context
 
+# class DeleteWeatherCardView(DeleteView):
+#     model = Location
+#     success_url = reverse_lazy('index')
 
 class AddLocationView(LoginRequiredMixin, View):
     def post(self, request):
