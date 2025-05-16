@@ -22,6 +22,7 @@ class WeatherAPIExceptionHandler:
                 raise WeatherAPITimeoutError("Service timeout")
             except requests.exceptions.ConnectionError as e:
                 logger.error(f"Connection error: {str(e)}")
+                logger.warning(requests.status_codes)
                 raise WeatherAPIConnectionError("Network problem")
             except requests.exceptions.HTTPError as e:
                 logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
@@ -105,6 +106,7 @@ class WeatherApiClient:
         enriched_data = self._enrich_weather_data(data)
 
         self._set_cached_data(cache_key, enriched_data, 15 * 60)  # 15 минут для погоды
+        # print(enriched_data)
         return enriched_data
 
     def _enrich_weather_data(self, data: dict) -> dict:

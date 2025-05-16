@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, View, ListView, DeleteView
@@ -84,3 +85,5 @@ class AddLocationView(LoginRequiredMixin, View):
 def page_not_found(request, exception):
     logger.debug("Запрос не существующей страницы %s", request.path)
     return render(request, "weather/not_found.html")
+
+

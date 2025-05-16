@@ -15,6 +15,6 @@ class RegisterUserForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control me-2 '}))
     password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control me-2'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control me-2'}), label='Password')
     password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control me-2'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control me-2'}), label='Confirm Password')
