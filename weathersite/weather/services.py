@@ -22,7 +22,6 @@ class WeatherAPIExceptionHandler:
                 raise WeatherAPITimeoutError("Service timeout")
             except requests.exceptions.ConnectionError as e:
                 logger.error(f"Connection error: {str(e)}")
-                logger.warning(requests.status_codes)
                 raise WeatherAPIConnectionError("Network problem")
             except requests.exceptions.HTTPError as e:
                 logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
