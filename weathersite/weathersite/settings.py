@@ -14,10 +14,8 @@ import logging.config
 import os
 # from http.cookiejar import debug
 from pathlib import Path
+
 import environ
-
-
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +37,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env.bool("DEBUG")
 
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-ALLOWED_HOSTS = ["*"] # 217.114.15.7
+ALLOWED_HOSTS = ["*"]  # 217.114.15.7
 # Application definition
 
 INSTALLED_APPS = [
@@ -88,10 +86,18 @@ WSGI_APPLICATION = "weathersite.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
 }
 
 # Password validation
@@ -141,7 +147,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # исходные файлы
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")    # результат collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # результат collectstatic
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
