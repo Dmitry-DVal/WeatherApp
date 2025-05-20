@@ -41,6 +41,7 @@ class WeatherHomeView(LoginRequiredMixin, WeatherDataMixin, ListView):
 
 class ShowLocationView(LoginRequiredMixin, WeatherSearchMixin, TemplateView):
     template_name = "weather/locations.html"
+    extra_context = {'title': 'Search.'}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

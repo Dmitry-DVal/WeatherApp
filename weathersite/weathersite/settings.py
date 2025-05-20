@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import logging.config
 import os
-from http.cookiejar import debug
+# from http.cookiejar import debug
 from pathlib import Path
 import environ
 

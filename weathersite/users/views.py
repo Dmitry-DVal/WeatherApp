@@ -15,11 +15,13 @@ logger = logging.getLogger("users")
 class LoginUserView(RedirectAuthenticatedUserMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'users/login.html'
+    extra_context = {'title': 'Authorization.'}
 
 class RegisterUserView(RedirectAuthenticatedUserMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('index')
+    extra_context = {'title': 'Registration.'}
 
     def form_valid(self, form):
         response = super().form_valid(form)
