@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import logging.config
 import os
-# from http.cookiejar import debug
 from pathlib import Path
 
 import environ
@@ -21,25 +20,24 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env()
-environ.Env.read_env(BASE_DIR / '.env')
 
-OW_API_KEY = env('OW_API_KEY')
+environ.Env.read_env(Path(BASE_DIR).parent / ".env")
+
+OW_API_KEY = env("OW_API_KEY")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = "django-insecure-g%_@jxb#(mxio4t!x_zosmoj4e2_tbj0j!3(v(2i6y4+ce5cy_"
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 DEBUG = env.bool("DEBUG")
 
-# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-ALLOWED_HOSTS = ["*"]  # 217.114.15.7
-# Application definition
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+# ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
+# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -86,13 +84,13 @@ WSGI_APPLICATION = "weathersite.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
+    "default": {
+        "ENGINE": env("DB_ENGINE"),
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
     # "default": {
     #     "ENGINE": "django.db.backends.sqlite3",
@@ -123,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'users:login'
-LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "users:login"
+LOGIN_URL = "/users/login/"
 
 TIME_ZONE = "UTC"
 
@@ -136,18 +134,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-# STATIC_URL = "static/"
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-# ]
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# STATIC_URL = "/static/"
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
 STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # исходные файлы
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # исходные файлы
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # результат collectstatic
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
