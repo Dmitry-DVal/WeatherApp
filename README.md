@@ -15,8 +15,8 @@
 
 
 ### Запуск приложения
-1. Склонирyйте репозиторий
-```bush
+1. Склонируйте репозиторий
+```bash
 git clone https://github.com/Dmitry-DVal/WeatherApp
 ```
 2. Сконфигурируйте файл `.env` в соответствие с примером
@@ -27,8 +27,8 @@ OW_API_KEY= действительный ключ OPENWEATHER_API_KEY, можн�
 
 # Настройка Django
 DJANGO_SECRET_KEY= django_secret_key # Секретный ключ Django
-DEBUG=True/False
-ALLOWED_HOSTS=217.114.15.7
+DEBUG=False
+ALLOWED_HOSTS=your_hosts # 127.0.0.1,localhost,
 
 # Настройка БД
 DB_ENGINE=django.db.backends.postgresql
@@ -41,8 +41,7 @@ DB_PORT=5432 # Порт PostgreSQL
 ```
 3. Запустите сервисы:
 
-```bush
-docker compose build
+```bash
 docker compose up -d --build
 ```
 
@@ -67,7 +66,7 @@ docker compose up -d --build
 - PostgreSQL
 - Poetry (управление зависимостями)
 - Requests (работа с API)
-##### Backend:
+##### Frontend:
 - Bootstrap 5
 - HTML/CSS
 #### Инфраструктура:
