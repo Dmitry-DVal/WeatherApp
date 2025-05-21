@@ -6,7 +6,7 @@
 
 [Подробнее про ТЗ проекта](https://zhukovsd.github.io/python-backend-learning-course/projects/weather-viewer/)
 
-[Дпелой приложения(доступен временно)](http://217.114.15.7)
+[Деплой приложения(доступен временно)](http://217.114.15.7)
 
 
 ### Мотивация проекта
@@ -15,7 +15,10 @@
 
 
 ### Запуск приложения
-1. Склонирyту репозиторий
+1. Склонирyйте репозиторий
+```bush
+git clone https://github.com/Dmitry-DVal/WeatherApp
+```
 2. Сконфигурируйте файл `.env` в соответствие с примером
 
 ```
@@ -32,13 +35,14 @@ DB_ENGINE=django.db.backends.postgresql
 DB_NAME=weathersite_db
 DB_USER=weathersite
 DB_PASSWORD=your_password
-DB_HOST=localhost 
+DB_HOST=db 
 DB_PORT=5432 # Порт PostgreSQL
 
 ```
-3. Соберите и запустите контейнер. Выполните скрип из корневой директории проекта:
+3. Запустите сервисы:
 
 ```bush
+docker compose build
 docker compose up -d --build
 ```
 
@@ -57,15 +61,19 @@ docker compose up -d --build
 
 
 ### Используемые технологии:
-- Python
-- Django/DjangoORM/Миграции
-- Poetry
-- Postgres
-- HTML/CSS, Bootstrap
-- unittest
-- requests
-- Docker/Docker Compose
-- Nginx/Gunicorn
+##### Backend:
+- Python 3.10+
+- Django
+- PostgreSQL
+- Poetry (управление зависимостями)
+- Requests (работа с API)
+##### Backend:
+- Bootstrap 5
+- HTML/CSS
+#### Инфраструктура:
+- Docker + Docker Compose
+- Nginx + Gunicorn
+- Unittest (тестирование
 
 
 ### Автор
